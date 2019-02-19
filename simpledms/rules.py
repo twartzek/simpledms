@@ -1,6 +1,4 @@
 # coding=utf-8
-
-
 import os
 import sqlite3
 from itertools import chain
@@ -64,8 +62,8 @@ class Rules:
     def applyrule(self, text):
         self.c.execute("SELECT ruleid FROM rules")
         ids = self.c.fetchall()
-        for id in ids:
-            self.c.execute("SELECT * FROM rules WHERE ruleid = ?", id)
+        for idx in ids:
+            self.c.execute("SELECT * FROM rules WHERE ruleid = ?", idx)
             rule = self.c.fetchone()
             if rule[2] == "ALL":
                 if all(word.lower() in text.lower() for word in rule[1].split(", ")):
@@ -102,8 +100,8 @@ class Rules:
         self.c.execute("SELECT tags FROM rules")
         rows = self.c.fetchall()
         tags = list(chain.from_iterable(rows))
-        l = [i.split(", ") for i in tags]
-        tags = [item for sublist in l for item in sublist]
+        ll = [i.split(", ") for i in tags]
+        tags = [item for sublist in ll for item in sublist]
         return tags
 
     def returnrulesoffolder(self, folder):

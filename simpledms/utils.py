@@ -1,9 +1,9 @@
 """Classes which are needed in main GUI."""
-
 import re
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 from ui.editrules import Ui_Dialog
 
 

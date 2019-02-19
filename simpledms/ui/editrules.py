@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-
 # Form implementation generated from reading ui file 'editrules.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
 # WARNING! All changes made in this file will be lost!
-
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore
+from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 
 class Ui_Dialog(object):

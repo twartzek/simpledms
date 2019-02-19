@@ -1,17 +1,17 @@
 """Package for pdf handling like text extraction, and date parsing."""
-
 import calendar
 import locale
 import os
 import re
 import subprocess  # nosec
 import tempfile
+from typing import List
 
 import cv2  # type: ignore
 import dateparser  # type: ignore
-from pdfrw import PdfReader, PdfWriter  # type: ignore
+from pdfrw import PdfReader
+from pdfrw import PdfWriter
 from tika import parser  # type: ignore
-from typing import List
 
 
 class PdfHandler:
