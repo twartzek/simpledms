@@ -27,13 +27,13 @@ On Linux I use recoll from https://www.lesbonscomptes.com/recoll/ to search for 
 ![screenshot](screenshot_rules.png)
 
 ## Installation
-It can be installed with
+Dependencies can be installed with [poetry](https://github.com/sdispater/poetry)
 ```
-pip install simpledms
+poetry install
 ```
 
 ## Usage
-Just run the main.py. Currently it requires pdftoppm for preview image generation.
+Just run the main.py. Currently it requires pdftoppm to generate preview image.
 
 ## License
 As this software uses PyQt5 it is licensed under GPLv3. 

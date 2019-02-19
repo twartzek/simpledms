@@ -103,3 +103,9 @@ ENV/
 
 # Visual Studio Code
 .vscode
+
+# simpledms local pref.json
+pref.json
+
+# Template for pdf creation
+*.odt
