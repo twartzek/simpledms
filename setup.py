@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="simpledms",
-    version="0.1.1",
+    version="0.1.4",
     author="twartzek",
     author_email="github@wartzek.de",
     description="A simple document management system.",
