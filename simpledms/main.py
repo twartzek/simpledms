@@ -24,8 +24,6 @@ from utils import MyDictionaryCompleter
 from utils import MyRulesWidget
 from utils import MyTextEdit
 
-# from renamehdlr import updateui_pdfrename
-
 CURRDIR = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -372,13 +370,6 @@ class Ui(QtWidgets.QMainWindow):
         else:
             self.textEdit_tags.clear()
 
-        # if result["keywords"] is not None:
-        #     self.listWidget_pdfthumbnails.setToolTip(
-        #         result["boolop"] + " keywords: " + result["keywords"]
-        #     )
-        # else:
-        #     self.listWidget_pdfthumbnails.setToolTip("No rule matches.")
-
         self.destination = result["destination"]
 
         self.treeView_output.setCurrentIndex(
@@ -468,8 +459,13 @@ class Ui(QtWidgets.QMainWindow):
         self.textEdit_tags.setCompleter(completer)
 
 
-if __name__ == "__main__":
+def start_gui():
     app = QtWidgets.QApplication(sys.argv)
     app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     window = Ui()
+    window.show()
     sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    start_gui()
