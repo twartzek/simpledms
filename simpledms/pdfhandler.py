@@ -9,6 +9,7 @@ from typing import List
 
 import cv2  # type: ignore
 import dateparser  # type: ignore
+from pdfrw import IndirectPdfDict
 from pdfrw import PdfReader
 from pdfrw import PdfWriter
 from tika import parser  # type: ignore
@@ -56,7 +57,15 @@ class PdfHandler:
             "300",
         ]
         subprocess.call(args)  # nosec
+        # Depending on number of pages pdftoppm generates a different filename
         im = cv2.imread(os.path.join(self.tempdirectory.name, "out-1.jpg"))
+        if im is None:
+            im = cv2.imread(os.path.join(self.tempdirectory.name, "out-01.jpg"))
+
+        # If still none, return
+        if im is None:
+            self.thumbfpath = None
+            return
         h, w, _ = im.shape
         h_new = self.thumbheight
         w_new = int(w * h_new / h)
@@ -92,11 +101,15 @@ class PdfHandler:
             regex = re.compile(r"-\d{1,}.pdf", re.IGNORECASE)
             filename = regex.sub("-" + str(n) + ".pdf", filename)
             n = n + 1
-        pdf.Info.Keywords = tags
-        pdf.Info.Title = doctitle
+
+        # pdf.Info.Keywords = tags
+        # pdf.Info.Title = doctitle
 
         # Write data
-        PdfWriter(os.path.join(targetdir, filename), trailer=pdf).write()
+        writer = PdfWriter()
+        writer.addpages(pdf.pages)
+        writer.trailer.Info = IndirectPdfDict(Title=doctitle, Keywords=tags)
+        writer.write(os.path.join(targetdir, filename))
 
         # try to delete file ##
         try:
