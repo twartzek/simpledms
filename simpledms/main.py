@@ -46,6 +46,8 @@ class Ui(QtWidgets.QMainWindow):
         self.rules = rules.Rules(self.pref["dmsroot"])
         self.currentselectedrulesfolder = None
         self.currentselectedsearchfolder = None
+        self.current_monitorfolder_index = None
+        self.parent_index = None
         self.filemodelmonitor = QFileSystemModel()
         self.rulesfoldermodel = QFileSystemModel()
         self.resultfoldermodel = QFileSystemModel()
@@ -288,6 +290,7 @@ class Ui(QtWidgets.QMainWindow):
     # -------- pdf renaming page -----------
     def listView_monitorfiles_clicked(self, index):
         """Show preview of pdf, extract date and words and propose tags and directory in dms root."""
+        self.current_monitorfolder_index = index
         pdffile = os.path.join(
             self.pref["monitorfolder"], self.filemodelmonitor.itemData(index)[0]
         )
@@ -313,8 +316,12 @@ class Ui(QtWidgets.QMainWindow):
         self.thumbnail.setPixmap(pixmap)
         self.thumbnail.resize(pixmap.width(), pixmap.height())
         self.analyze_text()
+        if self.readyforstorage():
+            self.statusbar.showMessage("Automatic renaming and moving file...")
+            # self.pushButton_ok_clicked()
         self.listView_monitorfiles.setEnabled(True)
         self.setCursor(QtCore.Qt.ArrowCursor)
+        self.statusbar.showMessage("Ready")
 
     def listView_monitorfiles_doubleclicked(self, index):
         """Open doubleclicked file.
@@ -384,7 +391,7 @@ class Ui(QtWidgets.QMainWindow):
         self.statusbar.showMessage("Ready")
         self.setCursor(QtCore.Qt.ArrowCursor)
 
-    def readyforstorage(self):
+    def readyforstorage(self) -> bool:
         """Check if file infos like date, text, tags and folder are set."""
         if (
             self.lineEdit_outputfilename.text()
@@ -413,6 +420,17 @@ class Ui(QtWidgets.QMainWindow):
         self.pdfhandler.update_and_move(path, doctitle, tags, date)
         self.updateui_pdfrename()
         self.setCursor(QtCore.Qt.ArrowCursor)
+        row = self.current_monitorfolder_index.row()
+        n_elements = self.filemodelmonitor.rowCount(self.parent_index)
+        if row + 1 < n_elements and n_elements > 0:
+            self.listView_monitorfiles_clicked(
+                self.current_monitorfolder_index.sibling(row + 1, 0)
+            )
+        if row + 1 >= n_elements and n_elements > 1:
+            self.listView_monitorfiles_clicked(
+                self.current_monitorfolder_index.sibling(row - 1, 0)
+            )
+        self.updateui_pdfrename()
         self.statusbar.showMessage("ready")
 
     def pushButton_addDate_clicked(self):
@@ -436,10 +454,12 @@ class Ui(QtWidgets.QMainWindow):
 
     def updateui_pdfrename(self):
         """Update ui of page pdfrename."""
-        self.filemodelmonitor.setRootPath(self.pref["monitorfolder"])
         self.filemodelmonitor.setFilter(QtCore.QDir.NoDotAndDotDot | QtCore.QDir.Files)
         self.filemodelmonitor.setNameFilters(["*.pdf"])
         self.filemodelmonitor.setNameFilterDisables(False)
+        self.parent_index = self.filemodelmonitor.setRootPath(
+            self.pref["monitorfolder"]
+        )
         self.listView_monitorfiles.setModel(self.filemodelmonitor)
         self.listView_monitorfiles.setRootIndex(
             self.filemodelmonitor.index(self.pref["monitorfolder"])
@@ -453,7 +473,6 @@ class Ui(QtWidgets.QMainWindow):
         self.treeView_output.hideColumn(1)
         self.treeView_output.hideColumn(2)
         self.treeView_output.hideColumn(3)
-        # todo: change name of header
         indexertags = set(self.rules.returnalltags())
         completer = MyDictionaryCompleter(myKeywords=indexertags)
         self.textEdit_tags.setCompleter(completer)
