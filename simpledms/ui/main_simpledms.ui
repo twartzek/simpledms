@@ -459,6 +459,21 @@
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>listView_monitorfiles</tabstop>
+  <tabstop>lineEdit_outputfilename</tabstop>
+  <tabstop>textEdit_tags</tabstop>
+  <tabstop>treeView_output</tabstop>
+  <tabstop>pushButton_ok</tabstop>
+  <tabstop>pushButton_addDate</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>pushButton_setmonitorfolder</tabstop>
+  <tabstop>pushButton_setdmsroot</tabstop>
+  <tabstop>pushButton_addrule</tabstop>
+  <tabstop>treeView_rules</tabstop>
+  <tabstop>pushButton_deleterule</tabstop>
+  <tabstop>treeView_rulesfolders</tabstop>
+ </tabstops>
  <resources>
   <include location="main_simpledms.qrc"/>
  </resources>
